@@ -4,7 +4,8 @@ db.counters.insertMany([
     { _id: "usuarioId", sequence_value: 0 },
     { _id: "acudienteId", sequence_value: 0 },
     { _id: "medicoId", sequence_value: 0 },
-    { _id: "citaId", sequence_value: 0 }
+    { _id: "citaId", sequence_value: 0 },
+    { _id: "ejeId", sequence_value: 0 }
 ]);
 
 function siguienteId(coleccion) {
@@ -15,6 +16,26 @@ function siguienteId(coleccion) {
     );
     return sequenceDocument.sequence_value;
 }
+/**
+ * ! eje
+ */
+use("db_campus_citas");
+db.eje.insertMany([
+    {
+        "nombre": "Pepe",
+        "usuario": "pepe123",
+        "rol": "admin",
+        "email": "pepe123@gmail.com"
+    },
+    {
+        "nombre": "Juan",
+        "usuario": "juan123",
+        "rol": "vendedor",
+        "email": "juan123@gmail.com"
+    }
+])
+use("db_campus_citas");
+db.eje.find({usuario: "juan123"}).pretty()
 /**
  * ! usuario
  */
