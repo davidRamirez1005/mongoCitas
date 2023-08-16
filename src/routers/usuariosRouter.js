@@ -1,7 +1,6 @@
 import {Router} from 'express';
 import dotenv from 'dotenv';
 import {con} from '../../db/atlas.js'
-import { middlewareUsuarioVerify, appDTOData } from '../middleware/usuario.js';
 import siguienteId from '../helpers/siguienteId.js';
 
 dotenv.config();
@@ -13,7 +12,7 @@ const appUsuarios = Router();
  * ? listar todas las bodegas ordenadas
  * * http://127.0.0.3:5012/usuario/listar
  */
-appUsuarios.get('/listar', middlewareUsuarioVerify, async(req, res) =>{
+appUsuarios.get('/listar', async(req, res) =>{
     if(!req.rateLimit) return;
 
     let db = await con();
@@ -27,7 +26,7 @@ appUsuarios.get('/listar', middlewareUsuarioVerify, async(req, res) =>{
 * ? agregar una nueva bodega
 * * http://127.0.0.3:5012/usuario
 */
-appUsuarios.post('/', middlewareUsuarioVerify, appDTOData, async (req, res) => {
+appUsuarios.post('/', async (req, res) => {
     if (!req.rateLimit) return;
 
     try {
@@ -48,8 +47,6 @@ appUsuarios.post('/', middlewareUsuarioVerify, appDTOData, async (req, res) => {
         res.status(406).send('no se ha podido crear el documento');
     }
 });
-
-
 
 
 export default appUsuarios;
