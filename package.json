@@ -24,6 +24,9 @@
     "jose": "4.14.4",
     "nodemon": "3.0.1",
     "reflect-metadata": "0.1.13",
-    "typescript": "5.1.6"
+    "typescript": "5.1.6",
+    "morgan": "^1.10.0",
+    "passport": "0.6.0",
+    "passport-http-bearer": "1.0.1"
   }
 }
