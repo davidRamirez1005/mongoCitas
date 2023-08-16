@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 import {Router} from 'express';
 import { jwtVerify } from 'jose';
 import createJWT from './generateJwt.js';
-import { User } from '../routers/storage/usuario.js'
 
 
 
@@ -14,7 +13,6 @@ const appVerify = Router();
 
 const createInstance = (className) => {
     const classMap = {
-        'usuario' : User
 
     };
     const Class = classMap[className];
