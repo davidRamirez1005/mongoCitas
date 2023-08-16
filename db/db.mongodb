@@ -1,0 +1,360 @@
+use("db_campus_citas");
+db.createCollection("counters");
+db.counters.insertMany([
+    { _id: "usuarioId", sequence_value: 0 },
+    { _id: "acudienteId", sequence_value: 0 },
+    { _id: "medicoId", sequence_value: 0 },
+    { _id: "citaId", sequence_value: 0 }
+]);
+
+function siguienteId(coleccion) {
+    const sequenceDocument = db.counters.findOneAndUpdate(
+        { _id: `${coleccion}Id` },
+        { $inc: { sequence_value: 1 } },
+        { returnDocument: "after" }
+    );
+    return sequenceDocument.sequence_value;
+}
+/**
+ * ! usuario
+ */
+use("db_campus_citas");
+db.createCollection("usuario", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'usu_nombre', 'usu_primer_apellido', 'usu_telefono','usu_direccion','usu_tipodoc', 'usu_acudiente'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                usu_nombre: {
+                    bsonType: 'string',
+                    description: 'El usu_nombre_usuario es obligatorio',
+                },
+                usu_segundo_nombre: {
+                    bsonType: 'string',
+                    description: 'El usu_segundo_nombre es obligatorio',
+                },
+                usu_primer_apellido: {
+                    bsonType: 'string',
+                    description: 'El usu_primer_apellido es obligatorio'
+                },
+                usu_segundo_apellido: {
+                    bsonType: 'string',
+                    description: 'El usu_segundo_apellido es obligatorio'
+                },
+                usu_telefono: {
+                    bsonType: 'string',
+                    description: 'El usu_telefono es obligatorio',
+                    pattern: '^[0-9]{10}$'
+                },
+                usu_direccion: {
+                    bsonType: 'string',
+                    description: 'El usu_direccion es obligatorio'
+                },
+                usu_email: {
+                    bsonType: 'string',
+                    description: 'El usu_email no es obligatorio ni opcional pero el dato debe ser en formato string',
+                    pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+                },
+                usu_tipodoc: {
+                    bsonType: 'string',
+                    description: 'El usu_tipodoc no es obligatorio ni opcional pero el dato debe ser en formato string'
+                },
+                usu_genero: {
+                    bsonType: 'string',
+                    description: 'El usu_genero no es obligatorio ni opcional pero el dato debe ser en formato string'
+                },
+                usu_acudiente: {
+                    bsonType: 'int',
+                    description: 'El usu_acudiente es obligatorio y debe ser un numero entero'
+                }
+            }
+        }
+    }
+});
+// data insertada
+db.usuario.insertMany([
+    {
+        _id: Number(siguienteId("usuario")),
+        usu_nombre: 'Juan',
+        usu_segundo_nombre: 'david',
+        usu_primer_apellido: 'Pérez',
+        usu_segundo_apellido: 'Gómez',
+        usu_telefono: '1234567890',
+        usu_direccion: 'Calle 123, Ciudad',
+        usu_email: 'juan@example.com',
+        usu_tipodoc: 'Cédula de Ciudadanía',
+        usu_genero: 'Masculino',
+        usu_acudiente: 1
+    },
+    {
+        _id: Number(siguienteId("usuario")),
+        usu_nombre: 'María',
+        usu_segundo_nombre: 'Fernanda',
+        usu_primer_apellido: 'Rodríguez',
+        usu_segundo_apellido: 'García',
+        usu_telefono: '9876543210',
+        usu_direccion: 'Calle 123, Ciudad',
+        usu_email: 'maria@example.com',
+        usu_tipodoc: 'Cédula de Ciudadanía',
+        usu_genero: 'Femenino',
+        usu_acudiente: 2
+    },
+    {
+        _id: Number(siguienteId("usuario")),
+        usu_nombre: 'Carlos',
+        usu_primer_apellido: 'González',
+        usu_segundo_apellido: 'Sánchez',
+        usu_telefono: '5555555555',
+        usu_direccion: 'Calle 123, Ciudad',
+        usu_email: 'carlos@example.com',
+        usu_tipodoc: 'Cédula de Ciudadanía',
+        usu_genero: 'Masculino',
+        usu_acudiente: 3
+    },
+    {
+        _id: Number(siguienteId("usuario")),
+        usu_nombre: 'Ana',
+        usu_segundo_nombre: 'María',
+        usu_primer_apellido: 'López',
+        usu_segundo_apellido: 'Torres',
+        usu_telefono: '9999999999',
+        usu_direccion: 'Calle 123, Ciudad',
+        usu_email: 'ana@example.com',
+        usu_tipodoc: 'Cédula de Ciudadanía',
+        usu_genero: 'Femenino',
+        usu_acudiente: 4
+    },
+    {
+        _id: Number(siguienteId("usuario")),
+        usu_nombre: 'Pedro',
+        usu_primer_apellido: 'Ramírez',
+        usu_segundo_apellido: 'Sánchez',
+        usu_telefono: '1111111111',
+        usu_direccion: 'Calle 123, Ciudad',
+        usu_email: 'pedro@example.com',
+        usu_tipodoc: 'Tarjeta de Identidad',
+        usu_genero: 'otro',
+        usu_acudiente: 5
+    }
+    
+
+])
+/**
+ * ! acudiente
+ */
+use("db_campus_citas");
+db.createCollection("acudiente", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'acu_nombreCompleto', 'acu_telefono', 'acu_direccion'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                acu_nombreCompleto: {
+                    bsonType: 'string',
+                    description: 'El acu_nombreCompleto_usuario es obligatorio',
+                },
+                acu_telefono: {
+                    bsonType: 'string',
+                    description: 'El acu_telefono es obligatorio',
+                },
+                acu_direccion: {
+                    bsonType: 'string',
+                    description: 'El acu_direccion es obligatorio'
+                }
+            }
+        }
+    }
+});
+// data insertada
+db.acudiente.insertMany([
+    {
+        _id: Number(siguienteId("acudiente")),
+        acu_nombreCompleto: 'María López',
+        acu_telefono: '987654321',
+        acu_direccion: 'Calle 123, Ciudad'
+    },
+    {
+        _id: Number(siguienteId("acudiente")),
+        acu_nombreCompleto: 'Carlos Sánchez',
+        acu_telefono: '555555555',
+        acu_direccion: 'Avenida 456, Pueblo'
+    },
+    {
+        _id: Number(siguienteId("acudiente")),
+        acu_nombreCompleto: 'Ana Torres',
+        acu_telefono: '999999999',
+        acu_direccion: 'Plaza 789, Villa'
+    },
+    {
+        _id: Number(siguienteId("acudiente")),
+        acu_nombreCompleto: 'Luis Pérez',
+        acu_telefono: '111111111',
+        acu_direccion: 'Avenida 789, Ciudad'
+    },
+    {
+        _id: Number(siguienteId("acudiente")),
+        acu_nombreCompleto: 'Elena Gómez',
+        acu_telefono: '222222222',
+        acu_direccion: 'Calle 456, Pueblo'
+    }
+]);
+/**
+ * ! medico
+ */
+use("db_campus_citas");
+db.createCollection("medico", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'med_nombreCompleto', 'med_consultorio', 'med_especialidad'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                med_nombreCompleto: {
+                    bsonType: 'string',
+                    description: 'El med_nombreCompleto_usuario es obligatorio',
+                },
+                med_consultorio: {
+                    bsonType: 'string',
+                    description: 'El med_consultorio es obligatorio',
+                },
+                med_especialidad: {
+                    bsonType: 'string',
+                    description: 'El med_especialidad es obligatorio'
+                }
+            }
+        }
+    }
+});
+// data insertada
+db.medico.insertMany([
+    {
+        _id: Number(siguienteId("medico")),
+        med_nombreCompleto: 'Dr. Juan Pérez',
+        med_consultorio: 'Consultorio A',
+        med_especialidad: 'Cardiología'
+    },
+    {
+        _id: Number(siguienteId("medico")),
+        med_nombreCompleto: 'Dra. Ana Rodríguez',
+        med_consultorio: 'Consultorio B',
+        med_especialidad: 'Dermatología'
+    },
+    {
+        _id: Number(siguienteId("medico")),
+        med_nombreCompleto: 'Dr. Luis Martínez',
+        med_consultorio: 'Consultorio C',
+        med_especialidad: 'Pediatría'
+    },
+    {
+        _id: Number(siguienteId("medico")),
+        med_nombreCompleto: 'Dra. Laura Gómez',
+        med_consultorio: 'Consultorio D',
+        med_especialidad: 'Oftalmología'
+    },
+    {
+        _id: Number(siguienteId("medico")),
+        med_nombreCompleto: 'Dr. Carlos Sánchez',
+        med_consultorio: 'Consultorio E',
+        med_especialidad: 'Neurología'
+    }
+]);
+/**
+ * ! cita
+ */
+use("db_campus_citas");
+db.createCollection("cita", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'cit_fecha', 'cit_estado', 'cit_medico', 'cit_datosUsuario'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                cit_fecha: {
+                    bsonType: 'date',
+                    description: 'El cit_fecha_usuario es obligatorio',
+                },
+                cit_estado: {
+                    bsonType: 'string',
+                    description: 'El cit_estado es obligatorio',
+                },
+                cit_medico: {
+                    bsonType: 'int',
+                    description: 'El cit_medico es obligatorio'
+                },
+                cit_datosUsuario: {
+                    bsonType: 'int',
+                    description: 'El cit_datosUsuario es obligatorio'
+                }
+            }
+        }
+    }
+});
+// data insertada
+db.cita.insertMany([
+    {
+        _id: Number(siguienteId("cita")),
+        cit_fecha: ISODate('2023-07-19'),
+        cit_estado: 'Realizada',
+        cit_medico: 1,
+        cit_datosUsuario: 1
+    },
+    {
+        _id: Number(siguienteId("cita")),
+        cit_fecha: ISODate('2023-05-13'),
+        cit_estado: 'Realizada',
+        cit_medico: 2,
+        cit_datosUsuario: 2
+    },
+    {
+        _id: Number(siguienteId("cita")),
+        cit_fecha: ISODate('2023-07-23'),
+        cit_estado: 'Realizada',
+        cit_medico: 3,
+        cit_datosUsuario: 3
+    },
+    {
+        _id: Number(siguienteId("cita")),
+        cit_fecha: ISODate('2023-07-30'),
+        cit_estado: 'Realizada',
+        cit_medico: 4,
+        cit_datosUsuario: 4
+    },
+    {
+        _id: Number(siguienteId("cita")),
+        cit_fecha: ISODate('2023-07-05'),
+        cit_estado: 'Realizada',
+        cit_medico: 5,
+        cit_datosUsuario: 5
+
+    }
+]);
