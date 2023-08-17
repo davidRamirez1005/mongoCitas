@@ -10,7 +10,8 @@ const crearToken = async (req, res) => {
     const encoder = new TextEncoder();
 
     // Busca el parámetro ``usuario`` en la colección "usuarios"
-    const result = await conexionDB.collection('usuario').findOne({usuario: req.params.usuario});
+    const result = await conexionDB.collection('eje').findOne({usuario: req.params.usuario});
+    console.log(result);
     if (!result) return res.status(404).send('Usuario no encontrado');
     const id = result._id.toString();
 
