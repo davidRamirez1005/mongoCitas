@@ -4,8 +4,8 @@ import {servidor} from './config/connect.js';
 import {limitget} from './helpers/configLimit.js'
 import appUsuarios from './routers/usuariosRouter.js';
 import passportHelper from './helpers/passportHelpert.js';
-import { crearToken } from './Auth/middlewareJWT.js';
-import validarPermisos from './jwt/permisosRoles.js';
+import { crearToken } from './middleware/middlewareJWT.js';
+import validarPermisos from './Auth/permisosRoles.js';
 
 dotenv.config();
 const appExpress = express();
