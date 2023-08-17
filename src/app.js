@@ -2,10 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import {servidor} from './config/connect.js';
 import {limitget} from './helpers/configLimit.js'
-import appUsuarios from './routers/usuariosRouter.js';
 import passportHelper from './helpers/passportHelpert.js';
-import { crearToken } from './middleware/middlewareJWT.js';
+import { crearToken } from './jwt/configJwt.js';
 import validarPermisos from './Auth/permisosRoles.js';
+import appUsuarios from './routers/usuariosRouter.js';
+import appCitas from './routers/citasRouter.js';
+import appMedico from './routers/medicosRouter.js';
 
 dotenv.config();
 const appExpress = express();
@@ -26,6 +28,8 @@ appExpress.get('/api/vendedor', passportHelper.authenticate('bearer', { session:
 
 appExpress.use('/token/:usuario',limitget(),crearToken)
 appExpress.use('/usuario',limitget(), appUsuarios)
+appExpress.use('/cita',limitget(), appCitas)
+appExpress.use('/medico',limitget(), appMedico)
 
 
 
