@@ -1,4 +1,4 @@
-import {con} from '../../db/atlas.js'
+import {con} from '../config/atlas.js'
 
 const especialidadEsp = async(req, res) =>{
     if(!req.rateLimit) return;

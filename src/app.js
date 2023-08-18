@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import {servidor} from './config/connect.js';
-import {limitget} from './helpers/configLimit.js'
+import {limitget} from './config/configLimit.js'
 import passportHelper from './helpers/passportHelpert.js';
 import { crearToken } from './jwt/configJwt.js';
 import validarPermisos from './Auth/permisosRoles.js';
