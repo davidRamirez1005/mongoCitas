@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from "jose"
-import { con } from "../../db/atlas.js";
+import { con } from "../config/atlas.js";
 import { ObjectId } from "mongodb";
 import dotenv from 'dotenv';
 dotenv.config();
