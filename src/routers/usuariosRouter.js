@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import dotenv from 'dotenv';
-import { listar, Paciente_medico, pacientes } from '../controllers/usuariosController.js'
+import { listar, Paciente_medico, pacientes, insertarPaciente } from '../controllers/usuariosController.js'
 
 dotenv.config();
 
@@ -24,5 +24,11 @@ appUsuarios.get('/medico/:medicoId',Paciente_medico)
  * * http://127.0.0.3:5012/usuario/consultoria/2
  */
 appUsuarios.get('/consultoria/:usuarioId',pacientes)
+/**
+ * ! POST
+ * ? Insertar un paciente a la tabla usuario pero si es menor de edad solicitar primero que ingrese el acudiente y validar si ya estaba registrado el acudiente.
+ * * http://127.0.0.3:5012/usuario
+ */
+appUsuarios.post('/',insertarPaciente)
 
 export default appUsuarios;
