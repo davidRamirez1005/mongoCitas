@@ -1,5 +1,5 @@
 import {con} from '../config/atlas.js'
-import { fecha, generoAtendido } from '../data/citaQuery.js'
+import { fecha, generoAtendido, rechazadaCita } from '../data/citaQuery.js'
 
 const listar = async(req, res) =>{
     if(!req.rateLimit) return;
@@ -36,5 +36,12 @@ const citaGenero = async (req, res) => {
     let result = await coleccion.aggregate(generoAtendido).toArray();
     res.send(result);
 };
+const citaRechazadaMes = async (req, res) => {
+    if (!req.rateLimit) return;
 
-export { listar, idEsp, diaEspe, citaGenero }
+    let db = await con();
+    let coleccion = db.collection('cita');
+    let result = await coleccion.aggregate(rechazadaCita).toArray();
+    res.send(result);
+};
+export { listar, idEsp, diaEspe, citaGenero, citaRechazadaMes }
