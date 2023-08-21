@@ -165,8 +165,6 @@ db.usuario.insertMany([
         usu_genero: 'otro',
         usu_acudiente: 5
     }
-    
-
 ])
 /**
  * ! acudiente
@@ -373,7 +371,7 @@ db.cita.insertMany([
     {
         _id: Number(siguienteId("cita")),
         cit_fecha: ISODate('2023-07-05'),
-        cit_estado: 'Realizada',
+        cit_estado: 'Rechazada',
         cit_medico: 5,
         cit_datosUsuario: 5
 
