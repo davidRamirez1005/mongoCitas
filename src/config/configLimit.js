@@ -2,8 +2,8 @@ import rateLimit from 'express-rate-limit';
 
 export let limitget = () => {
     return rateLimit({
-        windowMs: 3000,
-        max: 3, // número máximo de solicitudes permitidas
+        windowMs: 10000,
+        max: 4, // número máximo de solicitudes permitidas
         statusCode: 429,
         // standardHeaders : true,
         // legacyHeaders : false,

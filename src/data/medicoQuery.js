@@ -13,10 +13,10 @@ export const encontrar_medCon = [
     }
 ];
 /**
- * ? Contar el número de citas que un médico tiene en un día específico (por ejemplo, el médico con _id 1 en '2023-07-19')
+ * ? Contar el número de citas que un médico tiene en un día específico (por ejemplo, el médico con med_nroMatriculaProfesional 12345 en '2023-07-19')
  */
 const fechaEspecifica = new Date('2023-07-19');
-const idMedico = 1;
+const numeroMedico = 12345;
 
 export const countCitas = [
     {
@@ -30,7 +30,7 @@ export const countCitas = [
     {
         $match: {
             cit_fecha: fechaEspecifica,
-            cit_medico: idMedico
+            "medico_relacionado.med_nroMatriculaProfesional": numeroMedico
         }
     },
     {
