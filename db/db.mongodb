@@ -5,7 +5,8 @@ db.counters.insertMany([
     { _id: "acudienteId", sequence_value: 0 },
     { _id: "medicoId", sequence_value: 0 },
     { _id: "citaId", sequence_value: 0 },
-    { _id: "ejeId", sequence_value: 0 }
+    { _id: "ejeId", sequence_value: 0 },
+    { _id: "rolesId", sequence_value: 0 }
 ]);
 
 function siguienteId(coleccion) {
@@ -241,65 +242,73 @@ db.createCollection("medico", {
     capped: true,
     size: 5000,
     max: 50,
-    validator: {
-        $jsonSchema: {
-            bsonType: 'object',
+    validator:{
+        $jsonSchema:{
+            bsonType: "object",
             additionalProperties: false,
-            required: ['_id', 'med_nombreCompleto', 'med_consultorio', 'med_especialidad'],
-            properties: {
-                _id: {
-                    bsonType: "int",
-                    description: "ID del usuario"
+            required : ['_id', 'med_nroMatriculaProfesional', 'med_nombreCompleto', 'med_consultorio','med_especialidad'],
+            properties:{
+                _id:{
+                    bsonType: 'int',
+                    description : "El ID_MEDICO es un parametro obligatorio y debe ser un entero"
                 },
-                med_nombreCompleto: {
-                    bsonType: 'string',
-                    description: 'El med_nombreCompleto_usuario es obligatorio',
+                med_nroMatriculaProfesional:{  
+                    bsonType: 'int',
+                    description : "El NUMERO_MATRICULA_PROFESIONAL es un parametro obligatorio y debe ser un string"
                 },
-                med_consultorio: {
+                med_nombreCompleto:{  
                     bsonType: 'string',
-                    description: 'El med_consultorio es obligatorio',
+                    description : "El NOMBRE_COMPLETO_MEDICO es un parametro obligatorio y debe ser un string"
                 },
-                med_especialidad: {
-                    bsonType: 'string',
-                    description: 'El med_especialidad es obligatorio'
+                med_consultorio:{  
+                    enum: ["Consultorio 1","Consultorio 2","Consultorio 3","Consultorio 4","Consultorio 5","Consultorio 6","Consultorio 7","Consultorio 8","Consultorio 9","Consultorio 10"],
+                    description : "El CONSULTORIO_MEDICO es un parametro obligatorio y debe ser uno valido"
+                },
+                med_especialidad:{  
+                    bsonType: 'array',
+                    description : "El ESPECIALIDAD_MEDICO es un parametro obligatorio y debe ser un array"
                 }
-            }
+        }
         }
     }
-});
-// data insertada
+})
 db.medico.insertMany([
     {
-        _id: Number(siguienteId("medico")),
-        med_nombreCompleto: 'Dr. Juan Pérez',
-        med_consultorio: 'Consultorio A',
-        med_especialidad: 'Cardiología'
+      _id: siguienteId("medico"),
+      med_nroMatriculaProfesional: 12345,
+      med_nombreCompleto: "Dr. Juan Pérez",
+      med_consultorio: "Consultorio 1",
+      med_especialidad: ["Pediatría", "Neonatología"]
     },
     {
-        _id: Number(siguienteId("medico")),
-        med_nombreCompleto: 'Dra. Ana Rodríguez',
-        med_consultorio: 'Consultorio B',
-        med_especialidad: 'Dermatología'
+      _id: siguienteId("medico"),
+      med_nroMatriculaProfesional: 67890,
+      med_nombreCompleto: "Dra. María González",
+      med_consultorio: "Consultorio 2",
+      med_especialidad: ["Ginecología", "Obstetricia"]
     },
     {
-        _id: Number(siguienteId("medico")),
-        med_nombreCompleto: 'Dr. Luis Martínez',
-        med_consultorio: 'Consultorio C',
-        med_especialidad: 'Pediatría'
+      _id: siguienteId("medico"),
+      med_nroMatriculaProfesional: 54321,
+      med_nombreCompleto: "Dr. Carlos Ramírez",
+      med_consultorio: "Consultorio 3",
+      med_especialidad: ["Cirugía General"]
     },
     {
-        _id: Number(siguienteId("medico")),
-        med_nombreCompleto: 'Dra. Laura Gómez',
-        med_consultorio: 'Consultorio D',
-        med_especialidad: 'Oftalmología'
+      _id: siguienteId("medico"),
+      med_nroMatriculaProfesional: 24680,
+      med_nombreCompleto: "Dr. Andrés López",
+      med_consultorio: "Consultorio 5",
+      med_especialidad: ["Cardiología", "Medicina Interna"]
     },
     {
-        _id: Number(siguienteId("medico")),
-        med_nombreCompleto: 'Dr. Carlos Sánchez',
-        med_consultorio: 'Consultorio E',
-        med_especialidad: 'Neurología'
+        _id: siguienteId("medico"),
+        med_nroMatriculaProfesional: 98765,
+        med_ombreCompleto: "Dra. Laura Martínez",
+        med_consultorio: "Consultorio 4",
+        med_especialidad: ["Dermatología"]
     }
-]);
+])
 /**
  * ! cita
  */
@@ -344,7 +353,7 @@ db.cita.insertMany([
         _id: Number(siguienteId("cita")),
         cit_fecha: ISODate('2023-07-19'),
         cit_estado: 'Realizada',
-        cit_medico: 1,
+        cit_medico: 6,
         cit_datosUsuario: 1
     },
     {
@@ -376,4 +385,72 @@ db.cita.insertMany([
         cit_datosUsuario: 5
 
     }
+]);
+/**
+ * ! roles
+ */
+use("db_campus_citas");
+db.createCollection("roles", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator:{
+        $jsonSchema:{
+            bsonType: "object",
+            additionalProperties: false,
+            required : ['_id', 'email_registro', 'password_registro','rol_name','rol_access'],
+            properties:{
+                _id:{
+                    bsonType: 'int',
+                    description : "El ID_ROL es un parametro obligatorio y debe ser un entero"
+                },
+                usuario_nickname:{  
+                    bsonType: 'string',
+                    description : "El ROL_NICKNAME es un parametro obligatorio y debe ser un string"
+                },
+                email_registro:{  
+                    bsonType: 'string',
+                    description : "El ROL_EMAIL es un parametro obligatorio y debe ser un string"
+                },
+                password_registro:{  
+                    bsonType: 'string',
+                    description : "El ROL_PASSWORD es un parametro obligatorio y debe ser un string"
+                },
+                rol_name:{  
+                    bsonType: 'string',
+                    description : "El NOMBRE_ROL es un parametro obligatorio y debe ser un string"
+                },
+                rol_access:{  
+                    bsonType: 'array',
+                    description : "El ACCESO_ROLES es un parametro obligatorio y debe ser un ARRAY"
+                }
+            }
+        }
+    }
+})
+db.roles.insertMany([
+{
+    _id: siguienteId("roles"),
+    usuario_nickname: "paciente1",
+    email_registro: "paciente1@example.com",
+    password_registro: "paciente123",
+    rol_name: "Paciente",
+    rol_access: ["usuario", "cita"]
+},
+{
+    _id: siguienteId("roles"),
+    usuario_nickname: "admin1",
+    email_registro: "admin@example.com",
+    password_registro: "admin123",
+    rol_name: "Administrador",
+    rol_access: ["usuario", "cita", "medico"]
+},
+{
+    _id: siguienteId("roles"),
+    usuario_nickname: "medico1",
+    email_registro: "medico1@example.com",
+    password_registro: "medico123",
+    rol_name: "Médico",
+    rol_access:["medico", "cita"]
+}
 ]);
