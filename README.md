@@ -30,7 +30,7 @@ debe pasar como body el email y contraseña que del rol que desea consultar:
   "ROL_PASSWORD": "medico123"
 }
 ```
-
+2. Al generar el token ubiquelo en 'Authorization' ___ bearer 'token generado ( importante colocar bearer antes del token)
 #### => Gestión de usuarios:
 
 Usar el endpoint `/usuario
