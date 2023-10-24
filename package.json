@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon --quiet ./api/app.js",
+    "start": "nodemon --quiet ./api/server/app/aplication.js",
     "tsc": "tsc -w",
     "dev": "vite",
     "build": "vite build",

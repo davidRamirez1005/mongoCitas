@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import dotenv from 'dotenv';
 import { especialidadEsp, medico_consultorio, numeroCitas } from '../controllers/medicoController.js'
-import validarPermisos from '../Auth/permisosRoles.js'
+import validarPermisos from '../Auth/domain/permisosRoles.js'
 
 dotenv.config();
 
